@@ -1,3 +1,14 @@
+import Products from '../components/product-list/Products';
+
+import useFetchProducts from '../hooks/useFetchProducts';
+
 export default function ProductListPage() {
-  return <div>ProductListPage</div>;
+  const { products } = useFetchProducts();
+
+  return (
+    <div>
+      <h2>Products</h2>
+      <Products products={products} />
+    </div>
+  );
 }
