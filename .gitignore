@@ -130,7 +130,13 @@ dist
 .pnp.*
 
 # CodeceptJS
-output
+output/
+
+# swc
+.swc/
 
 # IDEA
-.idea
+.idea/
+
+# MacOS
+.DS_store
