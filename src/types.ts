@@ -97,3 +97,7 @@ export const nullOrderDetail: OrderDetail = {
   status: '',
   orderedAt: '',
 };
+
+export type ChangeFunction = ({
+  optionId, optionItemId,
+}: {optionId: string, optionItemId: string}) => void
