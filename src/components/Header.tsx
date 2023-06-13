@@ -1,6 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
+
+import Button from '../ui/Button';
+
+import useFetchCategories from '../hooks/useFetchCategories';
+import useAccessToken from '../hooks/useAccessToken';
+import { apiService } from '../services/ApiService';
 
 const Container = styled.header`
   margin-bottom: 2rem;
@@ -26,13 +32,58 @@ const Container = styled.header`
   }
 `;
 
-// TODO: 헤더에 카테고리 목록 보여주기
 export default function Header() {
+  const navigate = useNavigate();
+
+  const { accessToken, setAccessToken } = useAccessToken();
+
+  const { categories } = useFetchCategories();
+
+  const handleClickLogout = async () => {
+    await apiService.logout();
+    setAccessToken('');
+    navigate('/');
+  };
+
   return (
     <Container>
       <h1>Shop</h1>
       <nav>
-        <Link to="products">Products</Link>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/products">Products</Link>
+            {!!categories.length && (
+              <ul>
+                {categories.map((category) => (
+                  <li key={category.id}>
+                    <Link to={`/products?categoryId=${category.id}`}>
+                      {category.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+          {accessToken ? (
+            <>
+              <li>
+                <Link to="/cart">Cart</Link>
+              </li>
+              <li>
+                <Button onClick={handleClickLogout}>
+                  Logout
+                </Button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
+        </ul>
       </nav>
     </Container>
   );

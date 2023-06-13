@@ -1,6 +1,8 @@
-/* eslint-disable import/no-unresolved */
+/* eslint-disable import/no-extraneous-dependencies */
 
 import '@testing-library/jest-dom';
+
+import 'whatwg-fetch';
 
 import 'reflect-metadata';
 
