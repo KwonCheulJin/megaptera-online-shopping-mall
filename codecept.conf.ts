@@ -14,12 +14,14 @@ export const config = {
   helpers: {
     Playwright: {
       url: 'http://localhost:8000',
-      show: false,
+      show: true,
       browser: 'chromium',
+      waitForTimeout: 10_000,
     },
   },
   include: {
-    I: './tests/steps_file',
+    I: './tests/steps_file.ts',
+    backdoor: './tests/backdoor.ts',
   },
   plugins: {
     retryFailedStep: {
