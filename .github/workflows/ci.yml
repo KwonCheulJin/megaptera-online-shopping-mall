@@ -19,7 +19,7 @@ jobs:
           node-version: '16'
           cache: npm
       - name: Install dependencies
-        run: npm run serve
+        run: npm ci
       - name: Lint
         run: npm run lint
       - name: Compile to check syntax
