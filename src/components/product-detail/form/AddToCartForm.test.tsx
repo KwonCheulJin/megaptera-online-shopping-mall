@@ -1,4 +1,4 @@
-import { container } from 'tsyringe';
+import { container as iocContainer } from 'tsyringe';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import fixtures from '../../../../fixtures';
 import ProductDetailStore from '../../../stores/ProductDetailStore';
@@ -7,25 +7,48 @@ import AddToCartForm from './AddToCartForm';
 
 const context = describe;
 
+let accessToken = '';
+
+jest.mock('../../../hooks/useAccessToken', () => () => ({
+  get accessToken() {
+    return accessToken;
+  },
+}));
+
 describe('AddToCartForm', () => {
-  beforeEach(() => {
-    container.clearInstances();
+  const [product] = fixtures.products;
 
-    const [product] = fixtures.products;
+  beforeEach(async () => {
+    iocContainer.clearInstances();
 
-    const productDetailStore = container.resolve(ProductDetailStore);
-
-    productDetailStore.fetchProduct({ productId: product.id });
+    const productDetailStore = iocContainer.resolve(ProductDetailStore);
+    await productDetailStore.fetchProduct({ productId: product.id });
   });
 
-  context('사용자가 장바구니에 담기를 클릭하면', () => {
-    it('"장바구니에 담았습니다" 문구가 출력된다.', async () => {
+  context("when the current user isn't logged in", () => {
+    beforeEach(() => {
+      accessToken = '';
+    });
+
+    it('renders message', () => {
+      const { container } = render(<AddToCartForm />);
+
+      expect(container).toHaveTextContent('주문하려면 로그인하세요');
+    });
+  });
+
+  context('when the current user is logged in', () => {
+    beforeEach(() => {
+      accessToken = 'ACCESS-TOKEN';
+    });
+
+    it('renders “Add To Cart” button', async () => {
       render(<AddToCartForm />);
 
       fireEvent.click(screen.getByText('장바구니에 담기'));
 
       await waitFor(() => {
-        expect(screen.getByText('장바구니에 담았습니다')).toBeInTheDocument();
+        screen.getByText(/장바구니에 담았습니다/);
       });
     });
   });

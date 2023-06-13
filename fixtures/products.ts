@@ -33,6 +33,38 @@ const products: ProductDetail[] = [
     ],
     description: '1st line\n2nd line\n3rd line',
   },
+  {
+    id: 'product-02',
+    category: {
+      id: 'category-02',
+      name: 'Bottom',
+    },
+    images: [
+      { url: 'http://example.com/02.jpg' },
+    ],
+    name: 'Product #2',
+    price: 150_000,
+    options: [
+      {
+        id: 'option-01',
+        name: 'Color',
+        items: [
+          { id: 'option-item-01', name: 'Black' },
+          { id: 'option-item-02', name: 'White' },
+        ],
+      },
+      {
+        id: 'option-02',
+        name: 'Size',
+        items: [
+          { id: 'option-item-03', name: 'S' },
+          { id: 'option-item-04', name: 'M' },
+          { id: 'option-item-05', name: 'L' },
+        ],
+      },
+    ],
+    description: '1st line\n2nd line\n3rd line',
+  },
 ];
 
 export default products;

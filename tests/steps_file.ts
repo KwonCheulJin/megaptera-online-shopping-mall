@@ -2,7 +2,16 @@
 
 module.exports = () => actor({
 
-  // Define custom steps here, use 'this' to access default methods of I.
-  // It is recommended to place a general 'login' function here.
+  login() {
+    this.amOnPage('/');
 
+    this.click('Login');
+
+    this.fillField('E-mail', 'tester@example.com');
+    this.fillField('Password', 'password');
+
+    this.click('로그인', { css: 'form' });
+
+    this.waitForText('Cart');
+  },
 });
