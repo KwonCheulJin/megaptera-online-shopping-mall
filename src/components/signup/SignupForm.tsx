@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
-
+import { useEffect } from 'react';
 import styled from 'styled-components';
-
-import { Link } from 'react-router-dom';
+import useAccessToken from '../../hooks/useAccessToken';
+import useSignupFormStore from '../../hooks/useSignupFormStore';
 import TextBox from '../../ui/TextBox';
 import Button from '../../ui/Button';
-
-import useAccessToken from '../../hooks/useAccessToken';
-import useLoginFormStore from '../../hooks/useLoginFormStore';
 
 const Container = styled.div`
   h2 {
@@ -24,12 +20,12 @@ const Container = styled.div`
   }
 `;
 
-export default function LoginForm() {
+export default function SignupForm() {
   const { setAccessToken } = useAccessToken();
 
   const [{
-    email, password, valid, error, accessToken,
-  }, store] = useLoginFormStore();
+    email, name, password, passwordConfirmation, valid, error, accessToken,
+  }, store] = useSignupFormStore();
 
   useEffect(() => {
     if (accessToken) {
@@ -41,18 +37,26 @@ export default function LoginForm() {
     store.changeEmail(value);
   };
 
+  const handleChangeName = (value: string) => {
+    store.changeName(value);
+  };
+
   const handleChangePassword = (value: string) => {
     store.changePassword(value);
   };
 
+  const handleChangePasswordConfirmation = (value: string) => {
+    store.changePasswordConfirmation(value);
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    store.login();
+    store.signup();
   };
 
   return (
     <Container>
-      <h2>로그인</h2>
+      <h2>회원 가입</h2>
       <form onSubmit={handleSubmit}>
         <TextBox
           label="E-mail"
@@ -61,22 +65,28 @@ export default function LoginForm() {
           onChange={handleChangeEmail}
         />
         <TextBox
+          label="Name"
+          value={name}
+          onChange={handleChangeName}
+        />
+        <TextBox
           label="Password"
           type="password"
           value={password}
           onChange={handleChangePassword}
         />
+        <TextBox
+          label="Password Confirmation"
+          type="password"
+          value={passwordConfirmation}
+          onChange={handleChangePasswordConfirmation}
+        />
         <Button type="submit" disabled={!valid}>
-          로그인
+          회원 가입
         </Button>
         {error && (
-          <p>로그인 실패</p>
+          <p>회원 가입 실패</p>
         )}
-        <p>
-          <Link to="/signup">
-            회원 가입
-          </Link>
-        </p>
       </form>
     </Container>
   );
