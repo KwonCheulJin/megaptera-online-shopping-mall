@@ -47,6 +47,10 @@ const handlers = [
   rest.post(`${BASE_URL}/cart/line-items`, (req, res, ctx) => (
     res(ctx.status(201))
   )),
+  rest.post(`${BASE_URL}/session`, (req, res, ctx) => {
+    res(ctx.status(201));
+    return res(ctx.json({ accessToken: 'Access-Token' }));
+  }),
   rest.delete(`${BASE_URL}/session`, (req, res, ctx) => (
     res(ctx.status(201))
   )),
