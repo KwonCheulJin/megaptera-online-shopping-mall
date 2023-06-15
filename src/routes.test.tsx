@@ -1,4 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 
@@ -72,6 +74,31 @@ describe('routes', () => {
 
       await waitFor(() => {
         screen.getAllByText(/장바구니/);
+      });
+    });
+  });
+  context('when the current path is “/login”', () => {
+    it('로그인 페이지 렌더링', async () => {
+      renderRouter('/login');
+
+      screen.getByRole('heading', { name: '로그인' });
+
+      await waitFor(() => {
+        screen.getAllByText(/Category #1/);
+      });
+
+      fireEvent.change(screen.getByLabelText('E-mail'), {
+        target: { value: 'newbie@example.com' },
+      });
+
+      fireEvent.change(screen.getByLabelText('Password'), {
+        target: { value: 'password' },
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: '로그인' }));
+
+      await waitFor(() => {
+        screen.getByText(/Cart/);
       });
     });
   });
