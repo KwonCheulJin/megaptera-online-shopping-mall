@@ -115,6 +115,22 @@ export default class ApiService {
     const { data } = await this.instance.get(`/orders/${orderId}`);
     return data;
   }
+
+  async createOrder({ receiver, payment }: {
+    receiver: {
+      name: string;
+      address1: string;
+      address2: string;
+      postalCode: string;
+      phoneNumber: string;
+    };
+    payment: {
+      merchantId: string;
+      transactionId: string;
+    };
+  }): Promise<void> {
+    await this.instance.post('/orders', { receiver, payment });
+  }
 }
 
 export const apiService = new ApiService();
