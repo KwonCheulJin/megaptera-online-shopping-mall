@@ -4,7 +4,7 @@ import {
 } from '../types';
 
 const API_BASE_URL = process.env.API_BASE_URL
-                     || 'https://shop-demo-api-02.fly.dev';
+                     || 'https://shop-demo-api-03.fly.dev';
 
 export default class ApiService {
   private instance = axios.create({
