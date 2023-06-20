@@ -22,7 +22,7 @@ type PaymentButtonProps = {
 export default function PaymentButton({ cart }: PaymentButtonProps) {
   const navigate = useNavigate();
 
-  const [{ valid }] = useOrderFormStore();
+  const [{ valid }, store] = useOrderFormStore();
 
   const { requestPayment } = usePayment(cart);
 
@@ -33,9 +33,8 @@ export default function PaymentButton({ cart }: PaymentButtonProps) {
 
     try {
       const { merchantId, transactionId } = await requestPayment();
-      console.log('🚀 ~ file: PaymentButton.tsx:37 ~ handleClick ~ merchantId, transactionId:', merchantId, transactionId);
 
-      // TODO: B/E로 주문 및 결제 정보 전달.
+      await store.order({ merchantId, transactionId });
 
       navigate('/order/complete');
     } catch (e) {

@@ -5,7 +5,8 @@ import { ProductSummary } from '../types';
 
 import fixtures from '../../fixtures';
 
-const BASE_URL = 'https://shop-demo-api-02.fly.dev';
+const API_BASE_URL = process.env.API_BASE_URL
+                     || 'https://shop-demo-api-03.fly.dev';
 
 const productSummaries: ProductSummary[] = fixtures.products
   .map((product) => ({
@@ -17,13 +18,13 @@ const productSummaries: ProductSummary[] = fixtures.products
   }));
 
 const handlers = [
-  rest.get(`${BASE_URL}/users/me`, (req, res, ctx) => (
+  rest.get(`${API_BASE_URL}/users/me`, (req, res, ctx) => (
     res(ctx.status(201))
   )),
-  rest.get(`${BASE_URL}/categories`, (req, res, ctx) => (
+  rest.get(`${API_BASE_URL}/categories`, (req, res, ctx) => (
     res(ctx.json({ categories: fixtures.categories }))
   )),
-  rest.get(`${BASE_URL}/products`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/products`, (req, res, ctx) => {
     const categoryId = req.url.searchParams.get('categoryId');
 
     if (categoryId) {
@@ -34,25 +35,38 @@ const handlers = [
     }
     return res(ctx.json({ products: productSummaries }));
   }),
-  rest.get(`${BASE_URL}/products/:id`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/products/:id`, (req, res, ctx) => {
     const product = fixtures.products.find((i) => i.id === req.params.id);
     if (!product) {
       return res(ctx.status(404));
     }
     return res(ctx.json(product));
   }),
-  rest.get(`${BASE_URL}/cart`, (req, res, ctx) => (
+  rest.get(`${API_BASE_URL}/cart`, (req, res, ctx) => (
     res(ctx.json(fixtures.cart))
   )),
-  rest.post(`${BASE_URL}/cart/line-items`, (req, res, ctx) => (
+  rest.post(`${API_BASE_URL}/cart/line-items`, (req, res, ctx) => (
     res(ctx.status(201))
   )),
-  rest.post(`${BASE_URL}/session`, (req, res, ctx) => {
+  rest.get(`${API_BASE_URL}/orders`, (req, res, ctx) => (
+    res(ctx.status(201), ctx.json({ orders: fixtures.orders }))
+  )),
+  rest.get(`${API_BASE_URL}/orders/:id`, (req, res, ctx) => {
+    const order = fixtures.orders.find((i) => i.id === req.params.id);
+    if (!order) {
+      return res(ctx.status(404));
+    }
+    return res(ctx.status(201), ctx.json(order));
+  }),
+  rest.post(`${API_BASE_URL}/session`, (req, res, ctx) => {
     res(ctx.status(201));
     return res(ctx.json({ accessToken: 'Access-Token' }));
   }),
-  rest.delete(`${BASE_URL}/session`, (req, res, ctx) => (
+  rest.delete(`${API_BASE_URL}/session`, (req, res, ctx) => (
     res(ctx.status(201))
+  )),
+  rest.post(`${API_BASE_URL}/users`, (req, res, ctx) => (
+    res(ctx.status(201), ctx.json({ accessToken: 'Access-Token' }))
   )),
 ];
 
